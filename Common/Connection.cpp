@@ -10,7 +10,7 @@ Connection::Connection() : Connection(nullptr, nullptr)
 }
 
 Connection::Connection(const char *strProtocol, const char *strPort):
-		sock(0),
+		sock(0), port(0),
 		protocol(Protocol::UNKNOWN)
 {
 	using std::strcmp;
@@ -27,8 +27,12 @@ Connection::Connection(const char *strProtocol, const char *strPort):
 		{
 			protocol = Protocol::UDP;
 		}
+		port = atoi(strPort);
+
 		sock = socket(AF_INET, SOCK_STREAM, static_cast<int>(protocol));
-		sockAddr.sin_port = static_cast<in_port_t>(atoi(strPort));
+
+		sockAddr.sin_family = AF_INET;
+		sockAddr.sin_port = htons(port);
 	}
 }
 

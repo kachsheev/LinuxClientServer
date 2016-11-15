@@ -2,6 +2,7 @@
 #define COMMON_CONNECTION_HPP
 
 #include <netinet/in.h>
+#include "Message.hpp"
 
 class Connection
 {
@@ -17,6 +18,7 @@ public:
 	Connection(const char *strProtocol, const char *strPort);
 	virtual ~Connection();
 
+protected:
 	Protocol getProtocol()
 	{
 		return protocol;
@@ -24,7 +26,7 @@ public:
 
 	int getPort()
 	{
-		return sockAddr.sin_port;
+		return port;
 	}
 
 	int getSocket()
@@ -32,10 +34,19 @@ public:
 		return sock;
 	}
 
+	sockaddr_in &getSockAddress()
+	{
+		return sockAddr;
+	}
+
 	virtual bool connect() = 0;
+
+	virtual bool send(const Message &message) = 0;
+	virtual bool recieve(Message &message) = 0;
 
 private:
 	int sock;
+	int port;
 	sockaddr_in sockAddr;
 	Protocol protocol;
 };
