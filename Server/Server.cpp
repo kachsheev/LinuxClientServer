@@ -34,7 +34,6 @@ bool Server::start()
 
 	while (working)
 	{
-		cout << "-> "; cin >> msg;
 		switch (connection.getProtocol())
 		{
 			case Connection::Protocol::UDP:
@@ -52,11 +51,11 @@ bool Server::start()
 	return true;
 }
 
-void Server::udpProcess(const std::string &/*message*/)
+void Server::udpProcess()
 {
 }
 
-void Server::tcpProcess(const std::string &/*message*/)
+void Server::tcpProcess()
 {
 }
 
@@ -64,7 +63,7 @@ void Server::printUsage()
 {
 	using std::cout;
 	cout << "Options:\n";
-	cout << "\t" "-t   --proto   <TCP/UDP>" "\n"
+	cout << "\t" "-t   --proto   <TCP or UDP>" "\n"
 			"\t" "-p   --port    <port number>" "\n";
 	cout.flush();
 }
