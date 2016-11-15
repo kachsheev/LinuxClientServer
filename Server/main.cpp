@@ -1,4 +1,11 @@
-int main(int argc, char *argv[])
+#include "Server.hpp"
+
+int main(int argc, char **argv)
 {
-	return 0;
+	Server server(argc, argv);
+	if (server.start())
+	{
+		return 0;
+	}
+	return 1;
 }

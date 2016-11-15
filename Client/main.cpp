@@ -1,4 +1,11 @@
-int main(int /*argc*/, char **/*argv*/)
+#include "Client.hpp"
+
+int main(int argc, char **argv)
 {
-	return 0;
+	Client client(argc, argv);
+	if (client.start())
+	{
+		return 0;
+	}
+	return 1;
 }
