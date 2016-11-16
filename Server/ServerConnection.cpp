@@ -40,7 +40,7 @@ bool ServerConnection::connect()
 		return false;
 	}
 
-	if (getProtocol() == Protocol::TCP)
+	if (getProtocol() != Protocol::UDP)
 	{
 		listen(getSocket(), 1);
 
@@ -77,11 +77,8 @@ bool ServerConnection::send(const Message &message)
 		}
 		case Protocol::UDP:
 		{
-			while (realWrite == 0)
-			{
-				realWrite = sendto(getSocket(), message.getData(), message.getDataSize(),
-						0, reinterpret_cast<const sockaddr *>(&clientAddr), clientAddrSize);
-			}
+			realWrite = sendto(getSocket(), message.getData(), message.getDataSize(),
+					0, reinterpret_cast<const sockaddr *>(&clientAddr), clientAddrSize);
 			if (realWrite < 0)
 			{
 				cerr << "ServerConnection::recieve(): UDP send error" "\n";

@@ -21,25 +21,21 @@ Connection::Connection(const char *strProtocol, const char *strPort):
 	memset(&sockAddr, 0, sizeof(sockAddr));
 	if (strPort != nullptr || strPort != nullptr)
 	{
+		int sockType = 0;
 		if (!strcmp("TCP", strProtocol))
 		{
 			protocol = Protocol::TCP;
+			sockType = SOCK_STREAM;
 		}
 		else if (!strcmp("UDP", strProtocol))
 		{
 			protocol = Protocol::UDP;
+			sockType = SOCK_DGRAM;
 		}
 
 		port = atoi(strPort);
 
-		if (protocol == Protocol::UDP)
-		{
-			sock = socket(AF_INET, SOCK_DGRAM, static_cast<int>(protocol));
-		}
-		else
-		{
-			sock = socket(AF_INET, SOCK_STREAM, static_cast<int>(protocol));
-		}
+		sock = socket(AF_INET, sockType, static_cast<int>(protocol));
 
 		if (sock < 0)
 		{
