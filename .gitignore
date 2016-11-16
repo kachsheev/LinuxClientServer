@@ -27,3 +27,9 @@
 /Server/build/Debug/ServerConnection.o
 /Server/build/Debug/main.o
 /Client/build/Debug/Makefile
+/Client/build/Debug/Client
+/Client/build/Debug/Client.o
+/Client/build/Debug/ClientConnection.o
+/Client/build/Debug/Connection.o
+/Client/build/Debug/Message.o
+/Client/build/Debug/main.o
