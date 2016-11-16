@@ -4,13 +4,8 @@
 
 Client::Client(int argc, char **argv) : printed(false), connection(nullptr)
 {
-	if (validAndParseArguments(argc, argv))
+	if (!validAndParseArguments(argc, argv))
 	{
-		// base client setting
-	}
-	else
-	{
-		// make invalid
 		printed = true;
 	}
 }

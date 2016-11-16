@@ -94,7 +94,7 @@ bool ClientConnection::receive(Message &message)
 			}
 			if (realRead < 0)
 			{
-				cerr << "ServerConnection::recieve(): TCP recieve error" "\n";
+				cerr << "ServerConnection::recieve(): TCP receive error" "\n";
 				return false;
 			}
 				break;
@@ -111,7 +111,7 @@ bool ClientConnection::receive(Message &message)
 			}
 			if (realRead < 0)
 			{
-				cerr << "ServerConnection::recieve(): UDP recieve error" "\n";
+				cerr << "ServerConnection::receive(): UDP receive error" "\n";
 				return false;
 			}
 			break;

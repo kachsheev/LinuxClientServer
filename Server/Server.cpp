@@ -2,14 +2,9 @@
 #include <iostream>
 #include "Server.hpp"
 
-Server::Server(int argc, char **argv) : connection(nullptr)
+Server::Server(int argc, char **argv) : printed(false), connection(nullptr)
 {
-	if(validAndParseArguments(argc, argv))
-	{
-		// base server setting
-		printed = false;
-	}
-	else
+	if (!validAndParseArguments(argc, argv))
 	{
 		// make invalid
 		printed = true;
