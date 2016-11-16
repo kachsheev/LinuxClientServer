@@ -32,7 +32,15 @@ Connection::Connection(const char *strProtocol, const char *strPort):
 
 		port = atoi(strPort);
 
-		sock = socket(AF_INET, SOCK_STREAM, static_cast<int>(protocol));
+		if (protocol == Protocol::UDP)
+		{
+			sock = socket(AF_INET, SOCK_DGRAM, static_cast<int>(protocol));
+		}
+		else
+		{
+			sock = socket(AF_INET, SOCK_STREAM, static_cast<int>(protocol));
+		}
+
 		if (sock < 0)
 		{
 			cerr << "Connection::Connection(): socket error" "\n";
