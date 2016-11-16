@@ -2,6 +2,7 @@
 #define CLIENT_CLIENT_HPP
 
 #include <string>
+#include "../Common/AbstractApplication.hpp"
 #include "ClientConnection.hpp"
 
 class Client: public AbstractApplication
@@ -17,11 +18,9 @@ private:
 	void printUsage();
 	bool validArguments(int argc, char **argv);
 
-	void udpProcess(const std::string &message);
-	void tcpProcess(const std::string &message);
-
 	// data
-	ClientConnection connection;
+	bool printed;
+	ClientConnection *connection;
 
 	// useless
 	Client() = delete;
