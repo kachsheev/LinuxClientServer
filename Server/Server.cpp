@@ -26,7 +26,6 @@ bool Server::start()
 	using std::cin;
 	using std::cerr;
 	using std::cout;
-	using std::string;
 
 	bool working = true;
 	Message message;
@@ -94,11 +93,11 @@ bool Server::validAndParseArguments(int argc, char **argv)
 		{
 			if (!strcmp("-t", argv[i]) || !strcmp("--proto", argv[i]))
 			{
-				strProtocol = argv[i+1];
+				strProtocol = argv[i + 1];
 			}
 			else if (!strcmp("-p", argv[i]) || !strcmp("--port", argv[i]))
 			{
-				strPort = argv[i+1];
+				strPort = argv[i + 1];
 			}
 			else goto failLabel;
 		}
