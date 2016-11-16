@@ -1,7 +1,7 @@
 #ifndef CLIENT_CLIENTCONNECTION_HPP
 #define CLIENT_CLIENTCONNECTION_HPP
 
-#include <netdb.h>
+#include <arpa/inet.h>
 #include "../Common/Connection.hpp"
 
 class ClientConnection: public Connection
@@ -19,7 +19,6 @@ public:
 	virtual bool receive(Message &message);
 
 private:
-	hostent *serverHost;
 };
 
 #endif // CLIENT_CLIENTCONNECTION_HPP

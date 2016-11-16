@@ -17,15 +17,9 @@ ClientConnection::ClientConnection(const char *strAddress,
 
 	if (strAddress != nullptr)
 	{
-		serverHost = gethostbyname(strAddress);
-		if (serverHost == nullptr)
+		if (!inet_aton(strAddress, &getSockAddress().sin_addr))
 		{
 			cerr << "ClientConnection::ClientConnection(): host not found." "\n";
-		}
-		else
-		{
-			strncpy((char *)&getSockAddress().sin_addr.s_addr,
-					(char *)serverHost->h_addr, serverHost->h_length);
 		}
 	}
 }
