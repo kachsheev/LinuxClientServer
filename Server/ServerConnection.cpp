@@ -5,7 +5,6 @@
 
 ServerConnection::ServerConnection()
 {
-	memset(&clientAddr, 0, sizeof(clientAddr));
 }
 
 ServerConnection::ServerConnection(const char *strProtocol, const char *strPort):
@@ -21,7 +20,6 @@ ServerConnection::~ServerConnection()
 
 	if (clientSock > 0)
 	{
-		cout << "ServerConnection destroyed" "\n";
 		close(clientSock);
 	}
 }
@@ -40,7 +38,7 @@ bool ServerConnection::connect()
 		return false;
 	}
 
-	if (getProtocol() != Protocol::UDP)
+	if (getProtocol() == Protocol::TCP)
 	{
 		listen(getSocket(), 1);
 
@@ -70,7 +68,7 @@ bool ServerConnection::send(const Message &message)
 			realWrite = write(clientSock, message.getData(), message.getDataSize());
 			if (realWrite < 0)
 			{
-				cerr << "ServerConnection::recieve(): TCP send error" "\n";
+				cerr << "ServerConnection::send(): TCP send error" "\n";
 				return false;
 			}
 			break;
@@ -81,7 +79,7 @@ bool ServerConnection::send(const Message &message)
 					0, reinterpret_cast<const sockaddr *>(&clientAddr), clientAddrSize);
 			if (realWrite < 0)
 			{
-				cerr << "ServerConnection::recieve(): UDP send error" "\n";
+				cerr << "ServerConnection::send(): UDP send error" "\n";
 				return false;
 			}
 			break;

@@ -32,12 +32,15 @@ bool ClientConnection::connect()
 {
 	using std::cerr;
 
-	sockaddr_in &sockAddr = getSockAddress();
-	int connectionResult = ::connect(getSocket(), reinterpret_cast<sockaddr *>(&sockAddr), sizeof(sockAddr));
-	if (connectionResult < 0)
+	if (getProtocol() == Protocol::TCP)
 	{
-		cerr << "ClientConnection::connect(): connection error (" << connectionResult << ")\n";
-		return false;
+		sockaddr_in &sockAddr = getSockAddress();
+		int connectionResult = ::connect(getSocket(), reinterpret_cast<sockaddr *>(&sockAddr), sizeof(sockAddr));
+		if (connectionResult < 0)
+		{
+			cerr << "ClientConnection::connect(): connection error (" << connectionResult << ")\n";
+			return false;
+		}
 	}
 	return true;
 }
@@ -54,7 +57,7 @@ bool ClientConnection::send(const Message &message)
 			realWrite = write(getSocket(), message.getData(), message.getDataSize());
 			if (realWrite < 0)
 			{
-				cerr << "ClientConnection::recieve(): TCP send error" "\n";
+				cerr << "ClientConnection::send(): TCP send error" "\n";
 				return false;
 			}
 			break;
@@ -67,7 +70,7 @@ bool ClientConnection::send(const Message &message)
 					0, reinterpret_cast<sockaddr *>(&sockAddr), sizeof(sockAddr));
 			if (realWrite < 0)
 			{
-				cerr << "ClientConnection::recieve(): UDP send error" "\n";
+				cerr << "ClientConnection::send(): UDP send error" "\n";
 				return false;
 			}
 			break;

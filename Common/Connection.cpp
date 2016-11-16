@@ -18,7 +18,6 @@ Connection::Connection(const char *strProtocol, const char *strPort):
 	using std::atoi;
 	using std::cerr;
 
-	memset(&sockAddr, 0, sizeof(sockAddr));
 	if (strPort != nullptr || strPort != nullptr)
 	{
 		int sockType = 0;
@@ -36,12 +35,12 @@ Connection::Connection(const char *strProtocol, const char *strPort):
 		port = atoi(strPort);
 
 		sock = socket(AF_INET, sockType, static_cast<int>(protocol));
-
 		if (sock < 0)
 		{
 			cerr << "Connection::Connection(): socket error" "\n";
 		}
 
+		memset(&sockAddr, 0, sizeof(sockAddr));
 		sockAddr.sin_family = AF_INET;
 		sockAddr.sin_port = htons(port);
 	}
