@@ -6,7 +6,20 @@
 class Message
 {
 public:
-	Message(std::string &&message);
+	enum Constants
+	{
+		MAX_BUFFER_SIZE = 1024
+	};
+
+	Message()
+	{
+		data.reserve(MAX_BUFFER_SIZE);
+	}
+
+	Message(std::string &&message): data(message)
+	{
+		data.resize(MAX_BUFFER_SIZE);
+	}
 
 	std::string &getData()
 	{
@@ -16,6 +29,11 @@ public:
 	const std::string &getData() const
 	{
 		return data;
+	}
+
+	size_t getDataSize() const
+	{
+		return data.size();
 	}
 
 private:

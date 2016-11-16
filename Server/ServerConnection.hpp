@@ -13,10 +13,12 @@ public:
 
 	virtual bool connect();
 
+	virtual bool send(const Message &message);
+	virtual bool recieve(Message &message);
 private:
-	int newSock;
-	int clientLength;
-	sockaddr_in clientAddress;
+	int clientSock;
+	socklen_t clientAddrSize;
+	sockaddr_in clientAddr;
 };
 
 #endif // SERVER_SERVERCONNECTION_HPP
