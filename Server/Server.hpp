@@ -20,6 +20,7 @@ private:
 	// funcs
 	void printUsage();
 	bool validAndParseArguments(int argc, char **argv);
+	void handleMessage(const Message &message);
 
 	// data
 	bool printed;

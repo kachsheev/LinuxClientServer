@@ -1,4 +1,7 @@
 #include <cstring>
+#include <cstdint>
+#include <algorithm>
+#include <vector>
 #include <iostream>
 #include "Server.hpp"
 
@@ -51,6 +54,7 @@ bool Server::start()
 		}
 		else
 		{
+			handleMessage(message);
 			connection->send(message);
 		}
 	}
@@ -104,4 +108,58 @@ failLabel:
 	cout << argv[0] << " <options>" "\n";
 	printUsage();
 	return false;
+}
+
+void Server::handleMessage(const Message &message)
+{
+	using std::cout;
+	using std::string;
+	using std::vector;
+	using std::sort;
+	using std::for_each;
+
+	uint8_t min = 9;
+	uint8_t max = 0;
+	uint32_t sum = 0;
+	vector<uint8_t> numbers(32);
+	numbers.clear();
+
+	const string &stringMessage = message.getString();
+
+	for (auto it = stringMessage.begin(); it != stringMessage.end(); ++it)
+	{
+		if (*it >= '0' && *it <= '9')
+		{
+			numbers.push_back(static_cast<uint8_t>(*it - '0'));
+			sum += numbers.back();
+
+			if (numbers.back() > max)
+			{
+				max = numbers.back();
+			}
+
+			if (numbers.back() < min)
+			{
+				min = numbers.back();
+			}
+		}
+	}
+
+	if (numbers.size())
+	{
+		sort(numbers.begin(), numbers.end(),
+				[](uint8_t first, uint8_t last) -> bool {
+					return (first > last);
+		});
+
+		cout << "Numbers:";
+		for_each(numbers.begin(), numbers.end(),
+				[](uint8_t number) {
+					cout << ' ' << uint16_t(number);
+		});
+		cout << '\n';
+		cout << "Min: " << uint16_t(min) << '\n'
+				<< "Max: " << uint16_t(max) << '\n';
+		cout.flush();
+	}
 }
