@@ -16,7 +16,7 @@ public:
 	virtual bool connect();
 
 	virtual bool send(const Message &message);
-	virtual bool recieve(Message &message);
+	virtual bool receive(Message &message);
 
 private:
 	hostent *serverHost;

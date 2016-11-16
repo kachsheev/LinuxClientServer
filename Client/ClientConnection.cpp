@@ -57,7 +57,7 @@ bool ClientConnection::send(const Message &message)
 	{
 		case Protocol::TCP:
 		{
-			realWrite = write(getSocket(), message.getData().data(), message.getDataSize());
+			realWrite = write(getSocket(), message.getData(), message.getDataSize());
 			if (realWrite < 0)
 			{
 				cerr << "ClientConnection::recieve(): TCP send error" "\n";
@@ -69,7 +69,7 @@ bool ClientConnection::send(const Message &message)
 		{
 			sockaddr_in &sockAddr = getSockAddress();
 			realWrite = sendto(getSocket(),
-					message.getData().data(), message.getDataSize(),
+					message.getData(), message.getDataSize(),
 					0, reinterpret_cast<sockaddr *>(&sockAddr), sizeof(sockAddr));
 			if (realWrite < 0)
 			{
@@ -84,7 +84,7 @@ bool ClientConnection::send(const Message &message)
 	return true;
 }
 
-bool ClientConnection::recieve(Message &message)
+bool ClientConnection::receive(Message &message)
 {
 	using std::cerr;
 
@@ -108,12 +108,12 @@ bool ClientConnection::recieve(Message &message)
 		case Protocol::UDP:
 		{
 			sockaddr_in &serverAddr = getSockAddress();
-			socklen_t sockLen = sizeof(serverAddr);
+			socklen_t serverAddrSize = sizeof(serverAddr);
 			while (realRead == 0)
 			{
 				realRead = recvfrom(getSocket(),
 						buff, Message::MAX_BUFFER_SIZE,
-						0, reinterpret_cast<sockaddr *>(&serverAddr), &sockLen);
+						0, reinterpret_cast<sockaddr *>(&serverAddr), &serverAddrSize);
 			}
 			if (realRead < 0)
 			{
@@ -125,10 +125,10 @@ bool ClientConnection::recieve(Message &message)
 		default:
 			break;
 	}
-	message.getData().clear();
+	message.clear();
 	for (ssize_t i = 0; i < realRead; ++i)
 	{
-		message.getData().push_back(buff[i]);
+		message.getString().push_back(buff[i]);
 	}
 	return true;
 }

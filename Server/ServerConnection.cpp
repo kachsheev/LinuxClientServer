@@ -12,7 +12,7 @@ ServerConnection::ServerConnection(const char *strProtocol, const char *strPort)
 		Connection(strProtocol, strPort)
 {
 	memset(&clientAddr, 0, sizeof(clientAddr));
-	getSockAddress().sin_addr.s_addr = INADDR_ANY;
+	getSockAddress().sin_addr.s_addr = htonl(INADDR_ANY);
 }
 
 ServerConnection::~ServerConnection()
@@ -67,7 +67,7 @@ bool ServerConnection::send(const Message &message)
 	{
 		case Protocol::TCP:
 		{
-			realWrite = write(clientSock, message.getData().data(), message.getDataSize());
+			realWrite = write(clientSock, message.getData(), message.getDataSize());
 			if (realWrite < 0)
 			{
 				cerr << "ServerConnection::recieve(): TCP send error" "\n";
@@ -77,8 +77,11 @@ bool ServerConnection::send(const Message &message)
 		}
 		case Protocol::UDP:
 		{
-			realWrite = sendto(clientSock, message.getData().data(), message.getDataSize(),
-					0, reinterpret_cast<sockaddr *>(&clientAddr), clientAddrSize);
+			while (realWrite == 0)
+			{
+				realWrite = sendto(getSocket(), message.getData(), message.getDataSize(),
+						0, reinterpret_cast<const sockaddr *>(&clientAddr), clientAddrSize);
+			}
 			if (realWrite < 0)
 			{
 				cerr << "ServerConnection::recieve(): UDP send error" "\n";
@@ -92,7 +95,7 @@ bool ServerConnection::send(const Message &message)
 	return true;
 }
 
-bool ServerConnection::recieve(Message &message)
+bool ServerConnection::receive(Message &message)
 {
 	using std::cerr;
 
@@ -115,7 +118,7 @@ bool ServerConnection::recieve(Message &message)
 		}
 		case Protocol::UDP:
 		{
-			while (realRead == 0)
+			while (realRead <= 0)
 			{
 				realRead = recvfrom(getSocket(),
 						buff, Message::MAX_BUFFER_SIZE,
@@ -132,10 +135,10 @@ bool ServerConnection::recieve(Message &message)
 			break;
 	}
 
-	message.getData().clear();
+	message.clear();
 	for (ssize_t i = 0; i < realRead; ++i)
 	{
-		message.getData().push_back(buff[i]);
+		message.getString().push_back(buff[i]);
 	}
 	return true;
 }

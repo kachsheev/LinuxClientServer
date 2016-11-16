@@ -41,7 +41,7 @@ public:
 	virtual bool connect() = 0;
 
 	virtual bool send(const Message &message) = 0;
-	virtual bool recieve(Message &message) = 0;
+	virtual bool receive(Message &message) = 0;
 
 private:
 	int sock;

@@ -49,7 +49,7 @@ bool Server::start()
 
 	while (working)
 	{
-		connection->recieve(message);
+		connection->receive(message);
 		std::cout << "Message: " << message.getData() << '\n';
 		if (message.getData() == "exit")
 		{

@@ -8,7 +8,7 @@ class Message
 public:
 	enum Constants
 	{
-		MAX_BUFFER_SIZE = 1024
+		MAX_BUFFER_SIZE = 256
 	};
 
 	Message()
@@ -21,19 +21,24 @@ public:
 		data.resize(MAX_BUFFER_SIZE);
 	}
 
-	std::string &getData()
+	const char *getData() const
 	{
-		return data;
-	}
-
-	const std::string &getData() const
-	{
-		return data;
+		return data.data();
 	}
 
 	size_t getDataSize() const
 	{
 		return data.size();
+	}
+
+	void clear()
+	{
+		data.clear();
+	}
+
+	std::string &getString()
+	{
+		return data;
 	}
 
 private:

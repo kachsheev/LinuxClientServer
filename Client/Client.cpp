@@ -48,7 +48,7 @@ bool Client::start()
 
 	while (working)
 	{
-		cout << "-> "; cin >> message.getData();
+		cout << "-> "; cin >> message.getString();
 		connection->send(message);
 		if (message.getData() == "exit")
 		{
@@ -56,7 +56,7 @@ bool Client::start()
 		}
 		else
 		{
-			connection->recieve(message);
+			connection->receive(message);
 			cout << "Recieved: " << message.getData() << '\n';
 		}
 	}
