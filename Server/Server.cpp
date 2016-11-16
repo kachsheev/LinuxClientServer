@@ -7,7 +7,6 @@ Server::Server(int argc, char **argv) : connection(nullptr)
 	if(validAndParseArguments(argc, argv))
 	{
 		// base server setting
-		parseArguments(argc, argv);
 		printed = false;
 	}
 	else
@@ -29,6 +28,9 @@ bool Server::start()
 	using std::cout;
 	using std::string;
 
+	bool working = true;
+	Message message;
+
 	if (printed)
 	{
 		goto exitLabel;
@@ -45,8 +47,6 @@ bool Server::start()
 		goto failLabel;
 	}
 
-	bool working = true;
-	Message message;
 	while (working)
 	{
 		connection->recieve(message);
@@ -96,7 +96,7 @@ bool Server::validAndParseArguments(int argc, char **argv)
 			{
 				strProtocol = argv[i+1];
 			}
-			else if (!strcmp("-p", argv[i]) && !strcmp("--port", argv[i]))
+			else if (!strcmp("-p", argv[i]) || !strcmp("--port", argv[i]))
 			{
 				strPort = argv[i+1];
 			}

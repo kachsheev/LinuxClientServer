@@ -106,7 +106,6 @@ bool ServerConnection::recieve(Message &message)
 			{
 				realRead = read(clientSock, buff, Message::MAX_BUFFER_SIZE);
 			}
-
 			if (realRead < 0)
 			{
 				cerr << "ServerConnection::recieve(): TCP recieve error" "\n";
@@ -116,9 +115,12 @@ bool ServerConnection::recieve(Message &message)
 		}
 		case Protocol::UDP:
 		{
-			realRead = recvfrom(getSocket(),
-					buff, Message::MAX_BUFFER_SIZE,
-					0, reinterpret_cast<sockaddr *>(&clientAddr), &clientAddrSize);
+			while (realRead == 0)
+			{
+				realRead = recvfrom(getSocket(),
+						buff, Message::MAX_BUFFER_SIZE,
+						0, reinterpret_cast<sockaddr *>(&clientAddr), &clientAddrSize);
+			}
 			if (realRead < 0)
 			{
 				cerr << "ServerConnection::recieve(): UDP recieve error" "\n";
