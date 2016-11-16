@@ -16,7 +16,7 @@ public:
 private:
 	// funcs
 	void printUsage();
-	bool validArguments(int argc, char **argv);
+	bool validAndParseArguments(int argc, char **argv);
 
 	// data
 	bool printed;

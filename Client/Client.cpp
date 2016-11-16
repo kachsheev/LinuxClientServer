@@ -4,7 +4,7 @@
 
 Client::Client(int argc, char **argv) : printed(false), connection(nullptr)
 {
-	if (validArguments(argc, argv))
+	if (validAndParseArguments(argc, argv))
 	{
 		// base client setting
 	}
@@ -50,7 +50,7 @@ bool Client::start()
 	{
 		cout << "-> "; cin >> message.getString();
 		connection->send(message);
-		if (message.getData() == "exit")
+		if (message.getString() == "exit")
 		{
 			working = false;
 		}
@@ -79,7 +79,7 @@ void Client::printUsage()
 	cout.flush();
 }
 
-bool Client::validArguments(int argc, char **argv)
+bool Client::validAndParseArguments(int argc, char **argv)
 {
 	using std::cout;
 	if (argc != 7)

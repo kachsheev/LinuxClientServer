@@ -51,7 +51,7 @@ bool Server::start()
 	{
 		connection->receive(message);
 		std::cout << "Message: " << message.getData() << '\n';
-		if (message.getData() == "exit")
+		if (message.getString() == "exit")
 		{
 			working = false;
 		}
