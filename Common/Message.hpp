@@ -41,6 +41,11 @@ public:
 		return data;
 	}
 
+	const std::string &getString() const
+	{
+		return data;
+	}
+
 private:
 	std::string data;
 };
