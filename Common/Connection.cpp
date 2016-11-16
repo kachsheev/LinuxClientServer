@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include <cstring>
 #include <unistd.h>
@@ -15,21 +16,27 @@ Connection::Connection(const char *strProtocol, const char *strPort):
 {
 	using std::strcmp;
 	using std::atoi;
+	using std::cerr;
 
 	memset(&sockAddr, 0, sizeof(sockAddr));
-	if (strPort != nullptr && strPort != nullptr)
+	if (strPort != nullptr || strPort != nullptr)
 	{
-		if (strcmp("TCP", strProtocol))
+		if (!strcmp("TCP", strProtocol))
 		{
 			protocol = Protocol::TCP;
 		}
-		else if (strcmp("TCP", strProtocol))
+		else if (!strcmp("UDP", strProtocol))
 		{
 			protocol = Protocol::UDP;
 		}
+
 		port = atoi(strPort);
 
 		sock = socket(AF_INET, SOCK_STREAM, static_cast<int>(protocol));
+		if (sock < 0)
+		{
+			cerr << "Connection::Connection(): socket error" "\n";
+		}
 
 		sockAddr.sin_family = AF_INET;
 		sockAddr.sin_port = htons(port);

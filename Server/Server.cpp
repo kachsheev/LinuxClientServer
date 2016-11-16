@@ -2,61 +2,70 @@
 #include <iostream>
 #include "Server.hpp"
 
-Server::Server(int argc, char **argv)
+Server::Server(int argc, char **argv) : connection(nullptr)
 {
-	if(validArguments(argc, argv))
+	if(validAndParseArguments(argc, argv))
 	{
 		// base server setting
 		parseArguments(argc, argv);
+		printed = false;
 	}
 	else
 	{
 		// make invalid
+		printed = true;
 	}
 }
 
 Server::~Server()
 {
-	// if valid - do something
+	delete connection;
 }
 
 bool Server::start()
 {
 	using std::cin;
+	using std::cerr;
 	using std::cout;
 	using std::string;
 
-	bool working = true;
-	if (!connection.connect())
+	if (printed)
 	{
-		return false;
+		goto exitLabel;
 	}
 
+	if (connection->getProtocol() == Connection::Protocol::UNKNOWN)
+	{
+		cerr << "Server::start(): unknown protocol" "\n";
+		goto failLabel;
+	}
+
+	if (!connection->connect())
+	{
+		goto failLabel;
+	}
+
+	bool working = true;
+	Message message;
 	while (working)
 	{
-		switch (connection.getProtocol())
+		connection->recieve(message);
+		std::cout << "Message: " << message.getData() << '\n';
+		if (message.getData() == "exit")
 		{
-			case Connection::Protocol::UDP:
-			{
-				udpProcess();
-				break;
-			}
-			case Connection::Protocol::TCP:
-			{
-				tcpProcess();
-				break;
-			}
+			working = false;
+		}
+		else
+		{
+			connection->send(message);
 		}
 	}
+
+exitLabel:
 	return true;
-}
 
-void Server::udpProcess()
-{
-}
-
-void Server::tcpProcess()
-{
+failLabel:
+	return false;
 }
 
 void Server::printUsage()
@@ -68,53 +77,37 @@ void Server::printUsage()
 	cout.flush();
 }
 
-bool Server::validArguments(int argc, char **argv)
+bool Server::validAndParseArguments(int argc, char **argv)
 {
 	using std::cout;
+	using std::strcmp;
 
 	if (argc != 5)
 	{
-		goto fail;
+		goto failLabel;
 	}
 	else
 	{
+		const char *strProtocol = nullptr;
+		const char *strPort = nullptr;
 		for (int i = 1; i < argc; i += 2)
 		{
-			if (!strcmp("-t", argv[i]) && !strcmp("--proto", argv[i]))
+			if (!strcmp("-t", argv[i]) || !strcmp("--proto", argv[i]))
 			{
-				goto fail;
-			} else if (!strcmp("-p", argv[i]) && !strcmp("--port", argv[i]))
-			{
-				goto fail;
+				strProtocol = argv[i+1];
 			}
+			else if (!strcmp("-p", argv[i]) && !strcmp("--port", argv[i]))
+			{
+				strPort = argv[i+1];
+			}
+			else goto failLabel;
 		}
+		connection = new ServerConnection(strProtocol, strPort);
 	}
 	return true;
 
-fail:
+failLabel:
 	cout << argv[0] << " <options>" "\n";
 	printUsage();
 	return false;
-}
-
-void Server::parseArguments(int argc, char **argv)
-{
-	using std::strcmp;
-
-	const char *strProtocol = nullptr;
-	const char *strPort = nullptr;
-	for (int i = 1; i < argc; ++i)
-	{
-		if (strcmp("-t", argv[i]) || strcmp("--proto", argv[i]))
-		{
-			strProtocol = argv[i+1];
-			++i;
-		}
-		else if (strcmp("-p", argv[i]) || strcmp("--port", argv[i]))
-		{
-			strPort = argv[i+1];
-			++i;
-		}
-	}
-	connection = ServerConnection(strProtocol, strPort);
 }

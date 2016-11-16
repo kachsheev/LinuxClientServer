@@ -18,7 +18,6 @@ public:
 	Connection(const char *strProtocol, const char *strPort);
 	virtual ~Connection();
 
-protected:
 	Protocol getProtocol()
 	{
 		return protocol;

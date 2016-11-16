@@ -19,12 +19,11 @@ protected:
 private:
 	// funcs
 	void printUsage();
-	bool validArguments(int argc, char **argv);
-
-	void parseArguments(int argc, char **argv);
+	bool validAndParseArguments(int argc, char **argv);
 
 	// data
-	ServerConnection connection;
+	bool printed;
+	ServerConnection *connection;
 
 	// useless
 	Server() = delete;
