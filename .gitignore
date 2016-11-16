@@ -18,3 +18,12 @@
 /build/Debug/Server/Server.o
 /build/Debug/Server/ServerConnection.o
 /build/Debug/Server/main.o
+/Server/Server.pro.user
+/Server/build/Debug/Connection.o
+/Server/build/Debug/Makefile
+/Server/build/Debug/Message.o
+/Server/build/Debug/Server
+/Server/build/Debug/Server.o
+/Server/build/Debug/ServerConnection.o
+/Server/build/Debug/main.o
+/Client/build/Debug/Makefile
